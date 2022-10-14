@@ -1,39 +1,30 @@
 <template>
     <div class="note">
-        <div
-          :class="!themeMode.isDark?'has-background-success-dark':'has-background-grey-dark'"
-          class="card mb-3 px-4 py-3"
-        >
-            <div class="field">
-                <div class="control">
-                    <textarea class="textarea" placeholder="Add new note"/>
-                </div>
-            </div>
 
-            <div class="field is-grouped is-grouped-right">
-                <div class="control">
-                    <button class="button is-link"
-                    :class="themeMode.isDark?'':'has-background-success'"
-                    
-                    >Add new note</button>
-                </div>
-            </div>
-        </div>
-        <div
-          v-for="i in 3"
-          :key="i"
-          class="card mb-3"
+       <NoteForm
+        v-model="newNote"
+        placeholder="Add new note"
+       >
+       <template #actions>
+        <button
+            :class="themeMode.isDark?'':'has-background-success'"
+            @click="storeNotes.addNote(newNote)"
+            :disabled="!newNote"
+            class="button is-link"
         >
-            <div class="card-content">
-                <div class="content">
-                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia, aut optio ducimus ipsam dolorem suscipit saepe quo illum sequi, enim dignissimos est, voluptate accusamus quia harum pariatur esse! Consequuntur, non?
-                </div>
-            </div>
-            <footer class="card-footer">
-                <a href="#" class="card-footer-item">Edit</a>
-                <a href="#" class="card-footer-item">Delete</a>
-            </footer>
-        </div>
+         Add new note            
+        </button>
+       </template>
+       </NoteForm>
+
+       <Note
+          v-for="note in storeNotes.notes"
+          :key="note.id"
+          :note="note"
+          @delete="storeNotes.deleteNote(note.id)"
+        />
+       
+        
     </div>
 </template>
 
@@ -41,9 +32,17 @@
 /**
  * import
  */
+ import {ref} from 'vue'
+ import Note from '@/components/notes/Note.vue'
+ import NoteForm from '@/components/notes/NoteForm.vue'
+ import {useStoreNotes} from '@/stores/storeNotes.js'
  import {useThemeMode} from '@/stores/themeMode.js'
 
- /* Theme Mode Handler */
+ /* Theme handler */
  const themeMode = useThemeMode()
+ /* Note handler */
+ const storeNotes =  useStoreNotes()
+ const newNote = ref('')
+ 
 
 </script>
