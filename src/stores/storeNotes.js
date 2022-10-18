@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import {ref} from 'vue'
+import {ref, computed} from 'vue'
 
 export const useStoreNotes = defineStore('storeNotes', ()=>{
  /* State */
@@ -48,10 +48,23 @@ export const useStoreNotes = defineStore('storeNotes', ()=>{
  const getNote = (id)=>{
     return notes.value.filter((note)=> note.id == id)[0].content
  }
+
+ const totalNotes = computed(()=>{
+    return notes.value.length
+ })
+ 
+ /* Total of characters for all notes combined */
+ const totalCharacters = computed(()=>{
+    let nb = 0
+    notes.value.forEach((note)=>{
+        nb += note.content.length
+    })
+    return nb
+ })
  
 
  return{
-    notes, addNote, deleteNote, getNote, updateNote
+    notes, addNote, deleteNote, getNote, updateNote, totalNotes, totalCharacters
  }
 
 })
